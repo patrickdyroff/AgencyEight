@@ -8,11 +8,11 @@ import pandas as pd
 st.set_page_config(layout='wide')
 
 # Title
-col1, col2, col3, col4, col5, col6 = st.columns(6, gap="small", vertical_alignment="center")
-with col1:
-	st.image("logo.png")
-with col2:
-	st.title("Agency Eight")
+#col1, col2, col3, col4, col5, col6 = st.columns(6, gap="small", vertical_alignment="center")
+#with col1:
+#	st.image("logo.png")
+#with col2:
+st.title("Agency Eight")
 
 # Submit new influencer to database
 
