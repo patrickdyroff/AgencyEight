@@ -1,9 +1,8 @@
-import streamlit as st
+influencer_IG_handleimport streamlit as st
 from st_supabase_connection import SupabaseConnection, execute_query
 import requests
 import re
 import pandas as pd
-from instabot import Bot
 import os
 from instagrapi import Client
 
@@ -53,20 +52,22 @@ except:
 # Adding the influencer to the new database
 if submitted:
 
-	#Instagram bot to get follower count
-	bot = Bot()
-	bot.login(username="agencyeight35", password="agencyeight2023", is_threaded=True, use_cookie=True)
-	user_id = bot.get_user_id_from_username(influencer_IG_handle)
-	user_info = bot.get_user_info(user_id)
-	#st.write(user_info)
-	influencer_IG_follower_count = user_info["follower_count"]
-
-	# Initialize connection to the DB
-	conn = st.connection("supabase",type=SupabaseConnection)
-
-	conn.table("InfluencerOutreach").insert(
-	[{"owner_name": owner, "IG_link": influencer_IG_link, "TT_link": influencer_TT_link, "IG_handle": influencer_IG_handle, "TT_handle": influencer_TT_handle, "IG_follower_count": influencer_IG_follower_count}]
-	).execute()
+	with st.spinner("Adding influencer to the database.."):
+		#Instagram bot to get follower count
+		cl = Client()
+		cl.login("agencyeight35", "agencyeight2023")
+		user_info = cl.user_info_by_username(influencer_IG_handle).dict()
+		#st.write(user_info)
+		influencer_IG_follower_count = user_info["follower_count"]
+	
+		# Initialize connection to the DB
+		conn = st.connection("supabase",type=SupabaseConnection)
+	
+		conn.table("InfluencerOutreach").insert(
+		[{"owner_name": owner, "IG_link": influencer_IG_link, "TT_link": influencer_TT_link, "IG_handle": influencer_IG_handle, "TT_handle": influencer_TT_handle, "IG_follower_count": influencer_IG_follower_count}]
+		).execute()
+	
+	st.success("Added!")
 
 # Display database
 if st.button("Show database", type="primary"):
